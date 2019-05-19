@@ -1,0 +1,15 @@
+db:
+  image: postgres:9.6.3
+web:
+  build: .
+  command: python yourcfp/manage.py runserver 0.0.0.0:8000
+  volumes:
+    - .:/usr/src/yourcfp
+  ports:
+    - "8000:8000"
+  links:
+    - db
+  environment:
+    - DJANGO_SETTINGS_MODULE=yourcfp.settings
+    
+
