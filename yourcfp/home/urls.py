@@ -1,10 +1,8 @@
-# Django
-from django.conf.urls import url
-from django.views.generic import TemplateView
+from django.urls import path
+from home.views import HomePageView
+
+app_name = 'home'
 
 urlpatterns = [
-    url(r'^$',
-        TemplateView.as_view(template_name='home/home.html'),
-        name='index'),
+    path('', HomePageView.as_view(), name='index'),
 ]
-
