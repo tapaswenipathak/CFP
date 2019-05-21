@@ -26,10 +26,10 @@
     <script src="{% static "yourcfp/jquery-custom/activate-datepicker.js" %}"></script>
     <script src="{% static "yourcfp/datetimepicker/bootstrap-datetimepicker.min.js" %}"></script>
     <script>
-    var CityUrl = "{% url 'registration:load_cities' %}"
-    var StateUrl = "{% url 'registration:load_states' %}"
-    var CheckState = "{% url 'registration:check_states' %}"
-    </script> 
+    var CityUrl = "#"
+    var StateUrl = "#"
+    var CheckState = "#"
+    </script>
     <script src="{% static "yourcfp/js/load_city.js" %}"></script>
     <script src="{% static "yourcfp/js/load_state.js" %}"></script>
     <script src="{% static "yourcfp/js/hide_resume_textbox.js" %}"></script>
@@ -60,7 +60,7 @@
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                     <li><a href="{% url 'administrator:profile' user.administrator.id %}">{% trans "Profile" %}</a></li>
-                                    <li><a href="{% url 'registration:signup_administrator' %}">{% trans "Create Admin Account" %}</a></li> 
+                                    <li><a href="{% url 'registration:signup_administrator' %}">{% trans "Create Admin Account" %}</a></li>
                                     <li><a href="{% url 'authentication:password_change' %}">{% trans "Change Password" %}</a></li>
                                     <li><a href="{% url 'authentication:logout_process' %}">{% trans "Log Out" %}</a></li>
                             </ul>
@@ -81,8 +81,8 @@
 
                         {% else %}
                         <ul class="nav navbar-nav text-uppercase" id="upper-nav">
-                        <li><a href="{% url 'registration:signup_administrator' %}" id="signup-admin-btn">{% trans "Sign Up Admin" %}</a></li>
-                        <li><a href="{% url 'authentication:login_process' %}" id="log-btn">{% trans "Log In" %}</a></li>
+                        <li><a href="#" id="signup-admin-btn">{% trans "Sign Up Admin" %}</a></li>
+                        <li><a href="#" id="log-btn">{% trans "Log In" %}</a></li>
                 </ul>
                     {% endif %}
             </div>
