@@ -20,5 +20,8 @@ from users import views as user_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),
-    path('register/', user_views.RegisterView.as_view(), name='register')
+    path('register-as-organizer/', user_views.OrganizerRegisterView.as_view(), name='register-as-organizer'),
+    path('register-as-speaker/', user_views.SpeakerRegisterView.as_view(), name='register-as-speaker'),
+    path('speaker_success/', user_views.sp_success, name='speaker-success'),
+    path('organizer_success/', user_views.or_success, name='organizer-success')
 ]
