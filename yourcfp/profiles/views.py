@@ -40,4 +40,24 @@ def profile(request):
             form = ProfileForm()
             return render(request, 'profiles/userprofile.html', {'form': form})
         else:
-            return render(request, 'profiles/userprofile.html', {'form': form})
+            form = ProfileForm()
+            return render(request, 'profiles/userprofile.html', {'form': form })
+
+def profile_detail(request, user_name):
+    user = User.objects.filter(username=user_name).exists()
+    if user:
+        user = User.objects.get(username=user_name)
+        profile = Profile.objects.filter(user=user).exists()
+        if profile:
+            profile = Profile.objects.get(user=user)
+            context = {
+                'blog_url':profile.blog_url,
+                'location':profile.location,
+                'twitter_handle':profile.twitter_handle,
+                'biography':profile.bio
+            }
+            return render(request, 'profiles/profile.html', context)
+        else:
+            return HttpResponse('Does not exist')
+    else:
+        return HttpResponse('User does not exist')

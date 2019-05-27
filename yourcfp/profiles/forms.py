@@ -11,6 +11,6 @@ class ProfileForm(forms.ModelForm):
 
         def save(self):
             instance = super(PostForm, self).save(commit=False)
-            instance.slug = slugify(instance.name)
+            instance.slug = slugify(instance.user.username)
             instance.save()
             return instance
