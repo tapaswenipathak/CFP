@@ -13,7 +13,7 @@ class OrganizerRegisterView(CreateView):
     model = User
     form_class = OrganizerSignUpForm
     template_name = 'users/organizer_register_form.html'
-    success_url = reverse_lazy('users:organizer-success')
+    success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'organizer'

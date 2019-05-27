@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 User = get_user_model()
 
-# Create your views here.
+# Create your views here
 
 @login_required
 def profile(request):
@@ -41,7 +41,7 @@ def profile(request):
             return render(request, 'profiles/userprofile.html', {'form': form})
         else:
             form = ProfileForm()
-            return render(request, 'profiles/userprofile.html', {'form': form })
+            return render(request, 'profiles/userprofile.html', {'form': form})
 
 def profile_detail(request, user_name):
     user = User.objects.filter(username=user_name).exists()
