@@ -1,0 +1,11 @@
+<h1>organizer name : {{ object.organizer }}</h1>
+<p>conference name : {{ object.name }}</p>
+<p>description : {{ object.description }}</p>
+<p>start date : {{ object.start_date|date }}</p>
+<p>end date : {{ object.end_date|date }}</p>
+<p>venue : {{ object.venue }}</p>
+<p>twitter_id : {{ object.twitter_id }}</p>
+<br>
+<a href="{% url 'events:conference-update' object.id object.slug %}">update view</a>
+<br>
+<a href="{% url 'events:conference-proposal-list' object.id object.slug %}">Show proposals</a>

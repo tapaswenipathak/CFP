@@ -1,0 +1,12 @@
+<h2>Edit Profile</h2>
+<br>
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+</form>
+
+{% if user.is_speaker %}
+  <a href="{% url 'proposals:proposal-list' %}">Show my proposals</a>
+{% else %}
+  <a href="{% url 'events:user-conference-list'%}">Show my Conferences</a>
+{% endif %}
