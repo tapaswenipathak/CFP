@@ -6,7 +6,6 @@ User = get_user_model()
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    slug = models.SlugField(unique=True, blank=True, null=True)
     blog_url = models.URLField(blank=True)
     twitter_handle = models.CharField(max_length=15, blank=True)
     location = models.CharField(max_length=50, blank=True)

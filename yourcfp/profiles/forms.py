@@ -7,10 +7,3 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['blog_url', 'twitter_handle', 'location', 'bio']
-        exclude = ['user', 'slug']
-
-        def save(self):
-            instance = super(PostForm, self).save(commit=False)
-            instance.user.profile.slug = slugify(instance.user.username)
-            instance.save()
-            return instance

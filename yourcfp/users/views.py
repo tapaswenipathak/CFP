@@ -28,9 +28,3 @@ class SpeakerRegisterView(CreateView):
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'speaker'
         return super().get_context_data(**kwargs)
-
-class OrganizerSuccess(TemplateView):
-    template_name = "users/organizer_redirect.html"
-
-class SpeakerSuccess(TemplateView):
-    template_name = "users/speaker_redirect.html"

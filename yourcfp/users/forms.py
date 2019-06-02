@@ -15,7 +15,7 @@ class OrganizerSignUpForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_organizer = True
         user.save()
-        student = Organizer.objects.create(user=user)
+        organizer = Organizer.objects.create(user=user)
         return user
 
 class SpeakerSignUpForm(UserCreationForm):
@@ -28,5 +28,5 @@ class SpeakerSignUpForm(UserCreationForm):
         user = super().save(commit=False)
         user.is_speaker = True
         user.save()
-        student = Speaker.objects.create(user=user)
+        speaker = Speaker.objects.create(user=user)
         return user
