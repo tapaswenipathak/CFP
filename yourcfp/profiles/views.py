@@ -66,7 +66,6 @@ User = get_user_model()
 
 @login_required
 def profile(request):
-    print(request.user.profile.bio)
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if profile_form.is_valid():
@@ -77,7 +76,8 @@ def profile(request):
         profile_form = ProfileForm(instance=request.user.profile)
 
     context = {
-        'form': profile_form
+        'form': profile_form,
+        'user':request.user
     }
 
     return render(request, 'profiles/userprofile.html', context)

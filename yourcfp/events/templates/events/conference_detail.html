@@ -6,4 +6,6 @@
 <p>venue : {{ object.venue }}</p>
 <p>twitter_id : {{ object.twitter_id }}</p>
 <br>
-<a href="{% url 'events:conference-update' object.id %}">update view</a>
+<a href="{% url 'events:conference-update' object.id object.slug %}">update view</a>
+<br>
+<a href="{% url 'events:conference-proposal-list' object.id object.slug %}">Show proposals</a>

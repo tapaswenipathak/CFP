@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import proposal_view, ProposalListView
+from .views import ProposalCreateView, UserProposalListView, ProposalDetailView, ProposalUpdateView
 
 app_name = 'proposals'
 
 urlpatterns = [
-    path('', proposal_view, name='proposal'),
-    path('proposal-list', ProposalListView.as_view(), name='proposal-list'),
+    path('', ProposalCreateView.as_view(), name='proposal'),
+    path('list', UserProposalListView.as_view(), name='proposal-list'),
+    path('<int:pk>/', ProposalDetailView.as_view(), name='proposal-detail'),
+    path('<int:pk>/update', ProposalUpdateView.as_view(), name='proposal-update')
 ]

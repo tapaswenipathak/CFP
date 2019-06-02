@@ -1,6 +1,6 @@
 <h2>Proposals</h2>
 <ul>
     {% for proposal in object_list %}
-        <li><a href="#">{{ proposal.author }}'s {{ proposal.name }} proposal </a></li>
+        <li><a href="{% url 'proposals:proposal-detail' proposal.id %}">{{ proposal.author }}'s {{ proposal.name }} proposal </a></li>
     {% endfor %}
 </ul>
