@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.text import slugify
+from users.models import Organizer
 
 User = get_user_model()
 
 # Create your models here.
 class Conference(models.Model):
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE)
+    organizer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     slug = models.SlugField(unique=True)
     description = models.TextField(default="")

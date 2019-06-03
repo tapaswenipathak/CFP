@@ -3,5 +3,7 @@ from django.views.generic.base import TemplateView
 
 # Create your views here.
 
-class HomePageView(TemplateView):
-    template_name = "home/home.html"
+def HomePageView(request):
+    x=request.user
+    print(type(x.username))
+    return render(request, "home/home.html")

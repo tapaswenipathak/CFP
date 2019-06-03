@@ -17,7 +17,7 @@ class UserConferenceList(UserPassesTestMixin, ListView):
     model = Conference
 
     def get_queryset(self):
-        return Conference.objects.filter(organizer=self.request.user)
+        return Conference.objects.filter(organizer=self.request.user.organizer)
 
     def test_func(self):
         user = self.request.user
@@ -52,7 +52,7 @@ class ConferenceCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
     permission_required = 'events.add_conference'
 
     def form_valid(self, form):
-        form.instance.organizer = self.request.user
+        form.instance.organizer = self.request.user.organizer
         return super().form_valid(form)
 
     def test_func(self):
@@ -68,11 +68,11 @@ class ConferenceUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
     permission_required = 'events.change_conference'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.organizer = self.request.user.organizer
         return super().form_valid(form)
 
     def test_func(self):
         conference = self.get_object()
-        if self.request.user == conference.organizer:
+        if self.request.user.username == conference.organizer.user.username:
             return True
         return False

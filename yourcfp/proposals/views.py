@@ -18,7 +18,7 @@ class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
     permission_required = 'proposals.add_proposal'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.speaker
         return super().form_valid(form)
 
     def test_func(self):
@@ -30,7 +30,7 @@ class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 class UserProposalListView(ListView):
     model = Proposal
     def get_queryset(self):
-        return Proposal.objects.filter(author=self.request.user)
+        return Proposal.objects.filter(author=self.request.user.speaker)
 
 class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Proposal
@@ -38,7 +38,10 @@ class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 
     def test_func(self):
         proposal = self.get_object()
-        if self.request.user == proposal.author:
+        if self.request.user.is_speaker:
+            if proposal.author == self.request.user.speaker:
+                return True
+        elif proposal.name.organizer.user == self.request.user:
             return True
         return False
 
@@ -49,11 +52,11 @@ class ProposalUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
     permission_required = 'proposals.change_proposal'
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        form.instance.author = self.request.user.speaker
         return super().form_valid(form)
 
     def test_func(self):
         proposal = self.get_object()
-        if self.request.user == proposal.author:
+        if self.request.user.speaker == proposal.author:
             return True
         return False
