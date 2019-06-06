@@ -25,12 +25,13 @@ class UserConferenceList(UserPassesTestMixin, ListView):
             return True
         return False
 
-class ConferenceProposalListView(UserPassesTestMixin, LoginRequiredMixin, ListView):
+class ConferenceProposalListView(PermissionRequiredMixin, UserPassesTestMixin, LoginRequiredMixin, ListView):
     model = Proposal
+    permission_required = 'proposals.view_proposal'
 
     def get_queryset(self):
         conference = Conference.objects.get(slug=self.kwargs['slug'])
-        return conference.proposal_set.all()
+        return conference.proposal_set.filter(status='published')
 
     def test_func(self):
         user = self.request.user

@@ -13,8 +13,8 @@ from events.models import Conference
 
 class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Proposal
-    fields = ['name', 'content']
-    success_url=reverse_lazy('proposals:proposal-list')
+    fields = ['name', 'content', 'status']
+    success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.add_proposal'
 
     def form_valid(self, form):
@@ -47,8 +47,8 @@ class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 
 class ProposalUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Proposal
-    fields = ['name', 'content']
-    success_url=reverse_lazy('proposals:proposal-list')
+    fields = ['name', 'content', 'status']
+    success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.change_proposal'
 
     def form_valid(self, form):
