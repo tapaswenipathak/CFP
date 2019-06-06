@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from events.models import Conference
-from users.models import Speaker
+from users.models import Speaker, Organizer
 User = get_user_model()
 
 # Create your models here.
@@ -14,6 +14,13 @@ STATUS_CHOICES = (
     ('published', 'Published'),
 )
 
+REVIEW_STATUS = (
+    ('to_be_reviewed', 'Is yet to be reviewed'),
+    ('under_review', 'Being Reviewed'),
+    ('accepted', 'Accepted'),
+    ('rejected', 'Rejected')
+)
+
 class Proposal(models.Model):
     author = models.ForeignKey(Speaker, on_delete=models.CASCADE)
     name = models.ForeignKey(Conference, on_delete=models.CASCADE)
@@ -24,3 +31,16 @@ class Proposal(models.Model):
 
     def __str__(self):
         return f'{self.author}\'s {self.name} proposal'
+
+class ProposalStatus(models.Model):
+    proposal_status = models.CharField(max_length=20, choices=REVIEW_STATUS,  default='to_be_reviewed')
+    proposal = models.OneToOneField(Proposal, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+
+class Feedback(models.Model):
+    feedback_text = models.TextField()
+    proposal = models.OneToOneField(Proposal, on_delete=models.CASCADE)
+    reviewer = models.ForeignKey(Organizer, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.proposal.author}'s {self.proposal.name} review"

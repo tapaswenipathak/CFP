@@ -4,6 +4,5 @@ from django.views.generic.base import TemplateView
 # Create your views here.
 
 def HomePageView(request):
-    x=request.user
-    print(type(x.username))
+    print(request.user.organizer.feedback_set.all())
     return render(request, "home/home.html")
