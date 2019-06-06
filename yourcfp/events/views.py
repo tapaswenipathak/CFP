@@ -6,6 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
 from .models import Conference
 from .forms import ConferenceForm, FeedbackForm, ProposalStatusForm
@@ -80,22 +81,29 @@ class ConferenceUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
         return False
 
 @login_required
+@permission_required(['proposals.add_proposalstatus', 'proposals.add_feedback'])
 def feedback(request, pk):
 
-    proposal = get_object_or_404(Proposal, pk=pk)
+    proposal = get_object_or_404(Proposal, pk=pk, status='published')
 
     if request.method == 'POST':
-        f_form = FeedbackForm(request.POST, instance=proposal.feedback)
-        p_form = ProposalStatusForm(request.POST, instance=proposal.proposalstatus)
+        f_form = FeedbackForm(request.POST)
+        p_form = ProposalStatusForm(request.POST)
 
         if f_form.is_valid() and p_form.is_valid():
-            f_form.save()
-            p_form.save()
+            f = f_form.save(commit=False)
+            f.proposal = proposal
+            f.reviewer = request.user.organizer
+            f.save()
+            p = p_form.save(commit=False)
+            p.proposal = proposal
+            p.reviewer = request.user.organizer
+            p.save()
             return redirect('proposals:proposal-detail', pk=pk)
 
     else:
-        f_form = FeedbackForm(instance=proposal.feedback)
-        p_form = ProposalStatusForm(instance=proposal.proposalstatus)
+        f_form = FeedbackForm()
+        p_form = ProposalStatusForm()
 
     context = {
         'f_form': f_form,

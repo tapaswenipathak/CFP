@@ -12,7 +12,10 @@ ORGANIZER_PERMISSIONS =  [
         Permission.objects.get(codename='change_conference'),
         Permission.objects.get(codename='view_conference'),
         Permission.objects.get(codename='delete_conference'),
-        Permission.objects.get(codename='view_proposal')
+        Permission.objects.get(codename='view_proposal'),
+		Permission.objects.get(codename='add_proposalstatus'),
+		Permission.objects.get(codename='add_feedback')
+
 	]
 
 def set_speaker_permission(user):
