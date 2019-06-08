@@ -21,12 +21,20 @@ REVIEW_STATUS = (
     ('rejected', 'Rejected')
 )
 
+TYPES_OF_TALKS = (
+    (30, 'Lightning talks'),
+    (90, 'A session'),
+    (180, 'A tutorial')
+)
+
 class Proposal(models.Model):
     author = models.ForeignKey(Speaker, on_delete=models.CASCADE)
     name = models.ForeignKey(Conference, on_delete=models.CASCADE)
-    content = models.TextField()
+    outline = models.CharField(max_length=100, default=None)
+    pitch = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES,  default='draft')
     objects = models.Manager()
+    talktime = models.IntegerField(choices=TYPES_OF_TALKS, default=30)
     published = PublishedManager()
 
     def __str__(self):

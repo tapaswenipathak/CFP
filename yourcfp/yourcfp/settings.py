@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'profiles.apps.ProfilesConfig',
     'users.apps.UsersConfig',
     'home.apps.HomeConfig',
+    'taggit',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -132,3 +133,5 @@ AUTH_USER_MODEL = 'users.User'
 
 LOGIN_REDIRECT_URL = 'profiles:profile'
 LOGIN_URL = '/login/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

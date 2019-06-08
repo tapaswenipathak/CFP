@@ -50,7 +50,7 @@ class ConferenceDetailView(DetailView):
 
 class ConferenceCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Conference
-    fields = ['name', 'description', 'start_date', 'end_date', 'venue', 'twitter_id']
+    fields = ['name', 'description', 'start_date', 'end_date', 'venue', 'twitter_id', 'topic_tags']
     success_url=reverse_lazy('events:conference-list')
     permission_required = 'events.add_conference'
 

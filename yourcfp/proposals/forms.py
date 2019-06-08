@@ -4,4 +4,4 @@ from .models import Proposal
 class ProposalForm(ModelForm):
     class Meta:
         model = Proposal
-        fields = ['name', 'content']
+        fields = ['name', 'outline', 'pitch', 'talktime']

@@ -8,12 +8,12 @@ from django.http import HttpResponse
 from .forms import ProposalForm
 from .models import Proposal
 from events.models import Conference
-
+from .tasks import propsal_remainder
 # Create your views here.
 
 class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Proposal
-    fields = ['name', 'content', 'status']
+    fields = ['name', 'outline', 'pitch', 'talktime']
     success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.add_proposal'
 
@@ -47,7 +47,7 @@ class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 
 class ProposalUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Proposal
-    fields = ['name', 'content', 'status']
+    fields = ['name', 'outline', 'pitch', 'talktime']
     success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.change_proposal'
 
