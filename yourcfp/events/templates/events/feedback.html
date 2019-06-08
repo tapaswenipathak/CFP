@@ -1,0 +1,9 @@
+<form method="POST" >
+{% csrf_token %}
+<fieldset class="form-group">
+
+{{ f_form.as_p }}
+{{ p_form.as_p }}
+</fieldset>
+
+<button type="submit">update</button>

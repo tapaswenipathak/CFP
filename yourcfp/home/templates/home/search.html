@@ -1,0 +1,19 @@
+{% if query %}
+  <h1>Users containing "{{ query }}"</h1>
+  <h3>
+  {% with results.count as total_results %}
+    Found {{ total_results }} result{{ total_results|pluralize }}
+  {% endwith %}
+  </h3>
+  {% for user in results %}
+    <h4>{{ user.username }}</h4>
+    {% empty %}
+    <p>There are no results for your query.</p>
+  {% endfor %}
+  {% else %}
+    <h1>Search for Speakers</h1>
+    <form action="." method="get">
+    {{ form.as_p }}
+    <input type="submit" value="Search">
+    </form>
+{% endif %}
