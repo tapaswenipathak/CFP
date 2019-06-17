@@ -1,9 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 
 from .forms import ProposalForm
 from .models import Proposal
@@ -13,12 +13,13 @@ from .tasks import propsal_remainder
 
 class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Proposal
-    fields = ['name', 'outline', 'pitch', 'talktime']
+    fields = ['title', 'outline', 'pitch', 'talktime', 'status', 'talktime']
     success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.add_proposal'
 
     def form_valid(self, form):
         form.instance.author = self.request.user.speaker
+        form.instance.name = Conference.objects.get(slug=self.kwargs['slug'])
         return super().form_valid(form)
 
     def test_func(self):
@@ -29,12 +30,14 @@ class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 
 class UserProposalListView(ListView):
     model = Proposal
+
     def get_queryset(self):
         return Proposal.objects.filter(author=self.request.user.speaker)
 
 class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Proposal
     permission_required = 'proposals.view_proposal'
+    query_pk_and_slug = True
 
     def test_func(self):
         proposal = self.get_object()
@@ -47,7 +50,7 @@ class ProposalDetailView(PermissionRequiredMixin, LoginRequiredMixin, UserPasses
 
 class ProposalUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Proposal
-    fields = ['name', 'outline', 'pitch', 'talktime']
+    fields = ['title', 'outline', 'pitch', 'talktime', 'status', 'talktime']
     success_url = reverse_lazy('proposals:proposal-list')
     permission_required = 'proposals.change_proposal'
 

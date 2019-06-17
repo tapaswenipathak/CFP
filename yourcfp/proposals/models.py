@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from events.models import Conference
 from users.models import Speaker, Organizer
+from django.utils.text import slugify
+
 User = get_user_model()
 
 # Create your models here.
@@ -29,6 +31,8 @@ TYPES_OF_TALKS = (
 
 class Proposal(models.Model):
     author = models.ForeignKey(Speaker, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100, default=None)
+    slug = models.SlugField(unique=True)
     name = models.ForeignKey(Conference, on_delete=models.CASCADE)
     outline = models.CharField(max_length=100, default=None)
     pitch = models.TextField()
@@ -36,6 +40,10 @@ class Proposal(models.Model):
     objects = models.Manager()
     talktime = models.IntegerField(choices=TYPES_OF_TALKS, default=30)
     published = PublishedManager()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Proposal, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.author}\'s {self.name} proposal'
