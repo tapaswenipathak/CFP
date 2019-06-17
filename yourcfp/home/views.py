@@ -1,9 +1,14 @@
+import operator
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from .forms import SearchForm
 from django.contrib.auth import get_user_model
 from users.models import Speaker
 from django.contrib.auth.decorators import login_required, user_passes_test
+
+from proposals.models import Proposal
+from users.models import Speaker
+
 User = get_user_model()
 
 # Create your views here.
@@ -31,9 +36,33 @@ def user_search(request):
             results.remove(i)
 
     context = {
-                'form': form,
-                'query': query,
-                'results': results
-                }
+        'form': form,
+        'query': query,
+        'results': results
+    }
 
     return render(request, 'home/search.html',context)
+
+def leaderboard(request):
+    points = []
+    x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0}
+    users = Speaker.objects.all()
+    for user in users:
+        x['speaker'] = user
+        proposal_submissions = user.proposal_set.all().filter(status='published')
+        for i in proposal_submissions:
+            x['score_for_submission'] += 1
+            try:
+                i.proposalstatus
+            except Proposal.proposalstatus.RelatedObjectDoesNotExist:
+                pass
+            else:
+                if i.proposalstatus.proposal_status == 'accepted':
+                    x['score_for_accepted'] += 1
+        points.append(x)
+        x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0}
+
+    sort_by_submissions = points.sort(key=operator.itemgetter('score_for_submission'), reverse=True)
+    sort_by_accepted = points.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
+
+    return render(request, 'home/leaderboard.html')
