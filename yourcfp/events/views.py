@@ -82,7 +82,7 @@ class ConferenceUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
 
 @login_required
 @permission_required(['proposals.add_proposalstatus', 'proposals.add_feedback'])
-def feedback(request, pk):
+def feedback(request, pk, slug):
 
     proposal = get_object_or_404(Proposal, pk=pk, status='published')
 
@@ -99,7 +99,7 @@ def feedback(request, pk):
             p.proposal = proposal
             p.reviewer = request.user.organizer
             p.save()
-            return redirect('proposals:proposal-detail', pk=pk)
+            return redirect('proposals:proposal-detail', pk=pk, slug=slug)
 
     else:
         f_form = FeedbackForm()
