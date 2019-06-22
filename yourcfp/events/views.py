@@ -87,8 +87,11 @@ def feedback(request, pk, slug):
     proposal = get_object_or_404(Proposal, pk=pk, status='published')
 
     if request.method == 'POST':
-        f_form = FeedbackForm(request.POST)
-        p_form = ProposalStatusForm(request.POST)
+        print('--------------------')
+        print(request.POST.fromkeys('proposal_status'))
+        print('--------------------')
+        f_form = FeedbackForm(instance=request.POST)
+        p_form = ProposalStatusForm(instance=request.POST)
 
         if f_form.is_valid() and p_form.is_valid():
             f = f_form.save(commit=False)
@@ -102,7 +105,7 @@ def feedback(request, pk, slug):
             return redirect('proposals:proposal-detail', pk=pk, slug=slug)
 
     else:
-        f_form = FeedbackForm()
+        f_form = FeedbackForm(instance=proposal.feedback)
         p_form = ProposalStatusForm()
 
     context = {

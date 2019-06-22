@@ -1,98 +1,38 @@
+{% load static %}
 <!DOCTYPE html>
-{% load i18n %}
-{% load staticfiles %}
-<html lang="en">
+<html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title>Your Conference Proposal</title>
-    <!-- Bootstrap core CSS -->
-    <link href="{% static "yourcfp/bootstrap-3.2.0-dist/css/bootstrap.min.css" %}" rel="stylesheet">
-    <link href="{% static "yourcfp/bootstrap-lumen-theme/css/bootstrap.min.css" %}" rel="stylesheet">
-    <!-- Custom styling taken from Systers Portal -->
+    <title>CFP</title>
     <link href="{% static "yourcfp/css/style.css" %}" rel="stylesheet">
-    <link href="{% static "yourcfp/jquery-ui-1.11.4.custom/jquery-ui.min.css" %}" rel="stylesheet">
-    <link href="{% static "yourcfp/jquery-ui-1.11.4.custom/jquery-ui.structure.min.css" %}" rel="stylesheet">
-    <link href="{% static "yourcfp/jquery-ui-1.11.4.custom/jquery-ui.theme.min.css" %}" rel="stylesheet">
-    <link href="{% static "yourcfp/datetimepicker/bootstrap-datetimepicker.min.css" %}" rel="stylesheet">
-    <link rel="icon" href="{% static 'yourcfp/images/favicon.ico' %}">
-
-    <script src="{% static "yourcfp/jquery/jquery-1.11.1.min.js" %}"></script>
-    <script src="{% static "yourcfp/bootstrap-3.2.0-dist/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "yourcfp/jquery-ui-1.11.4.custom/jquery-ui.min.js" %}"></script>
-    <script src="{% static "yourcfp/jquery-custom/activate-datepicker.js" %}"></script>
-    <script src="{% static "yourcfp/datetimepicker/bootstrap-datetimepicker.min.js" %}"></script>
-    <script>
-    var CityUrl = "#"
-    var StateUrl = "#"
-    var CheckState = "#"
-    </script>
-    <script src="{% static "yourcfp/js/load_city.js" %}"></script>
-    <script src="{% static "yourcfp/js/load_state.js" %}"></script>
-    <script src="{% static "yourcfp/js/hide_resume_textbox.js" %}"></script>
   </head>
   <body>
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-		<div class="container-fluid">
-			<div class="navbar-header">
-			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-			<span class="sr-only">Toggle navigation</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			</button>
-                <a class="navbar-brand" href="{% url 'home:index' %}"><img id= 'systers-logo' src="{% static 'yourcfp/images/logo.png' %}"></a>
-            </div>
-
-		<div class="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style="height: 1px;">
-
-            <ul class="nav navbar-nav text-uppercase" id="lower-nav">
-                    {% if user.is_authenticated %}
-                        {% if user.administrator %}
-                            <li><a href="{% url 'administrator:report' %}">{% trans "Report" %}</a></li>
-                            <li><a href="{% url 'administrator:settings' %}">{% trans "Events" %}</a></li>
-                            <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                              style="text-transform: capitalize; text-decoration: none;">{% trans user.administrator.first_name %}
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                    <li><a href="{% url 'administrator:profile' user.administrator.id %}">{% trans "Profile" %}</a></li>
-                                    <li><a href="{% url 'registration:signup_administrator' %}">{% trans "Create Admin Account" %}</a></li>
-                                    <li><a href="{% url 'authentication:password_change' %}">{% trans "Change Password" %}</a></li>
-                                    <li><a href="{% url 'authentication:logout_process' %}">{% trans "Log Out" %}</a></li>
-                            </ul>
-                        </li>
-
-                            <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                    <li><a href="{% url 'authentication:logout_process' %}">{% trans "Log Out" %}</a></li>
-                                    <li><a href="{% url 'authentication:password_change' %}">{% trans "Change Password" %}</a></li>
-                            </ul>
-                        </li>
-                        {% else %}
-                        {% endif %}
-            </ul>
-
-                        {% else %}
-                        <ul class="nav navbar-nav text-uppercase" id="upper-nav">
-                        <li><a href="#" id="signup-admin-btn">{% trans "Sign Up Admin" %}</a></li>
-                        <li><a href="#" id="log-btn">{% trans "Log In" %}</a></li>
-                </ul>
-                    {% endif %}
-            </div>
+    <header>
+      <div class="container">
+        <div>
+          <h1 id="branding">YOURCFP</h1>
         </div>
-	</div>
-    <div class="container">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
+        <nav>
+          <ul>
+            <li><a href={% url 'users:register-as-speaker' %}>register as speaker</a> </li>
+            <li><a href={% url 'users:register-as-organizer' %}>register as organizer</a></li>
+            <li><a href={% url 'login' %}>login</a></li>
+            <li><a href={% url 'logout' %}>logout</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <section id=showcase>
+      <h1>Welcome to YourCFP</h1>
+      <p>A CFP site for all your events</p>
+    </section>
+    {% block content %}{% endblock %}
   </body>
 </html>
+
+<br>
+<br>
+<a href="{% url 'events:conference-list' %}">list of conferences</a>
+<br>
+<a href="{% url 'events:conference-create' %}">create a new event</a>
+<hr>
