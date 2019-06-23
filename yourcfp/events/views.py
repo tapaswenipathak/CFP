@@ -66,7 +66,7 @@ class ConferenceCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
 
 class ConferenceUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Conference
-    fields = ['name', 'description', 'start_date', 'end_date', 'venue', 'twitter_id']
+    fields = ['name', 'description', 'start_date', 'end_date', 'venue', 'twitter_id', 'topic_tags']
     success_url=reverse_lazy('events:conference-list')
     permission_required = 'events.change_conference'
 
@@ -88,10 +88,10 @@ def feedback(request, pk, slug):
 
     if request.method == 'POST':
         print('--------------------')
-        print(request.POST.fromkeys('proposal_status'))
+        print(request.POST.get('feedback_text'))
         print('--------------------')
-        f_form = FeedbackForm(instance=request.POST)
-        p_form = ProposalStatusForm(instance=request.POST)
+        f_form = FeedbackForm(request.POST, instance=proposal.feedback)
+        p_form = ProposalStatusForm(request.POST, instance=proposal.proposalstatus)
 
         if f_form.is_valid() and p_form.is_valid():
             f = f_form.save(commit=False)
@@ -106,7 +106,7 @@ def feedback(request, pk, slug):
 
     else:
         f_form = FeedbackForm(instance=proposal.feedback)
-        p_form = ProposalStatusForm()
+        p_form = ProposalStatusForm(instance=proposal.proposalstatus)
 
     context = {
         'f_form': f_form,
