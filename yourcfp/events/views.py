@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -80,37 +80,39 @@ class ConferenceUpdateView(PermissionRequiredMixin, LoginRequiredMixin, UserPass
             return True
         return False
 
+def is_reviewer(user):
+    return user.is_organizer
+
 @login_required
-@permission_required(['proposals.add_proposalstatus', 'proposals.add_feedback'])
+@permission_required(['proposals.add_proposalstatus', 'proposals.add_feedback'], raise_exception=True)
+@user_passes_test(is_reviewer)
 def feedback(request, pk, slug):
 
     proposal = get_object_or_404(Proposal, pk=pk, status='published')
+    if proposal.name.organizer == request.user.organizer:
+        if request.method == 'POST':
+            f_form = FeedbackForm(request.POST, instance=proposal.feedback)
+            p_form = ProposalStatusForm(request.POST, instance=proposal.proposalstatus)
 
-    if request.method == 'POST':
-        print('--------------------')
-        print(request.POST.get('feedback_text'))
-        print('--------------------')
-        f_form = FeedbackForm(request.POST, instance=proposal.feedback)
-        p_form = ProposalStatusForm(request.POST, instance=proposal.proposalstatus)
+            if f_form.is_valid() and p_form.is_valid():
+                f = f_form.save(commit=False)
+                f.proposal = proposal
+                f.reviewer = request.user.organizer
+                f.save()
+                p = p_form.save(commit=False)
+                p.proposal = proposal
+                p.reviewer = request.user.organizer
+                p.save()
+                return redirect('proposals:proposal-detail', pk=pk, slug=slug)
 
-        if f_form.is_valid() and p_form.is_valid():
-            f = f_form.save(commit=False)
-            f.proposal = proposal
-            f.reviewer = request.user.organizer
-            f.save()
-            p = p_form.save(commit=False)
-            p.proposal = proposal
-            p.reviewer = request.user.organizer
-            p.save()
-            return redirect('proposals:proposal-detail', pk=pk, slug=slug)
+        else:
+            f_form = FeedbackForm(instance=proposal.feedback)
+            p_form = ProposalStatusForm(instance=proposal.proposalstatus)
 
-    else:
-        f_form = FeedbackForm(instance=proposal.feedback)
-        p_form = ProposalStatusForm(instance=proposal.proposalstatus)
+        context = {
+            'f_form': f_form,
+            'p_form': p_form
+        }
 
-    context = {
-        'f_form': f_form,
-        'p_form': p_form
-    }
-
-    return render(request, 'events/feedback.html', context)
+        return render(request, 'events/feedback.html', context)
+    return HttpResponseForbidden('<h1>403 forbidden<h1/>')
