@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 
 from proposals.models import Proposal
 from users.models import Speaker
+from proposals.forms import BulkSubmit
 
 User = get_user_model()
 
@@ -65,4 +66,13 @@ def leaderboard(request):
     sort_by_submissions = points.sort(key=operator.itemgetter('score_for_submission'), reverse=True)
     sort_by_accepted = points.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
 
-    return render(request, 'home/leaderboard.html')
+    if request.method == 'POST':
+        # print('----------------------')
+        # print(Proposal.objects.all().filter(status='draft'))
+        # print('----------------------')
+        form = BulkSubmit()
+    else:
+        Proposal.objects.all()
+        form = BulkSubmit()
+    context = {'form' : form }
+    return render(request, 'home/leaderboard.html', context)
