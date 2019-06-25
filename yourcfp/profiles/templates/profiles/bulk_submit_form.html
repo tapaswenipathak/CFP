@@ -1,0 +1,11 @@
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <br>
+  <h1>Select proposals to publish</h1>
+  <form method="post" style="background-color:#ffffff">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Submit">
+  </form>
+{% endblock content %}

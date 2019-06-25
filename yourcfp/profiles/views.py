@@ -6,6 +6,7 @@ from proposals.models import Proposal, ProposalStatus
 from .models import Profile
 from .forms import ProfileForm, DashboardForm
 from django.http import HttpResponse
+from proposals.forms import BulkSubmit
 
 User = get_user_model()
 
@@ -42,7 +43,7 @@ def profile_detail(request, slug):
     else:
         return HttpResponse('User does not exist')
 
-def dashboard(request):
+def speaker_dashboard(request):
     form = DashboardForm()
     context = {
         'proposals' : [],
@@ -88,3 +89,17 @@ def dashboard(request):
     else:
         context['form'] = form
     return render(request, 'profiles/dashboard.html', context)
+
+@login_required
+def bulk_submit(request):
+    if request.method == 'POST':
+        x = dict(request.POST).get('proposal_list')
+        for i in x:
+            m = Proposal.objects.get(slug=i)
+            setattr(m, 'status', 'published')
+            m.save()
+        return redirect(reverse('profiles:dashboard'))
+    else:
+        form = BulkSubmit(request.user)
+    context = {'form' : form }
+    return render(request, 'profiles/bulk_submit_form.html', context)
