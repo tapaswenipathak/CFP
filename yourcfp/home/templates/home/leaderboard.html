@@ -1,6 +1,18 @@
-<h2>testing it out</h2>
-<br>
-<form method="post">{% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Save">
-</form>
+<table>
+  <thead>
+    Welcome to the Leaderboard
+  </thead>
+  <caption>Leaderboard</caption>
+  <th>Speaker</th>
+  <th>Score</th>
+  <th>Rank</th>
+  {% for i in q %}
+    <tr>
+      {% for a,b in i.items %}
+        <td>{{ a }}</td>
+        <td>{{ b }}</td>
+        <td>{{ i.count }}</td>
+      {% endfor %}
+    </tr>
+  {% endfor %}
+</table>

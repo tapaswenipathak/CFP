@@ -29,6 +29,7 @@
               <a class="nav-item nav-link" href="{% url 'events:conference-list' %}">Events</a>
               {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'profiles:profile' %}">Profile</a>
+                <a class="nav-item nav-link" href="{% url 'home:search' %}">Search for Speakers</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>

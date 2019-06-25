@@ -1,4 +1,5 @@
 import operator
+import copy
 from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 from .forms import SearchForm
@@ -21,7 +22,6 @@ def check_for_organizer(user):
     return user.is_organizer
 
 @login_required
-@user_passes_test(check_for_organizer)
 def user_search(request):
     form = SearchForm()
     query = None
@@ -51,29 +51,34 @@ def leaderboard(request):
     for user in users:
         x['speaker'] = user
         proposal_submissions = user.proposal_set.all().filter(status='published')
+        x['score_for_submission'] = proposal_submissions.count()
         for i in proposal_submissions:
-            x['score_for_submission'] += 1
-            try:
-                i.proposalstatus
-            except Proposal.proposalstatus.RelatedObjectDoesNotExist:
-                pass
-            else:
                 if i.proposalstatus.proposal_status == 'accepted':
                     x['score_for_accepted'] += 1
         points.append(x)
         x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0}
 
-    sort_by_submissions = points.sort(key=operator.itemgetter('score_for_submission'), reverse=True)
-    sort_by_accepted = points.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
+    sort_by_submissions = copy.deepcopy(points)
+    sort_by_submissions.sort(key=operator.itemgetter('score_for_submission'), reverse=True)
+    print('=======================================')
+    print(sort_by_submissions)
+    print('=======================================')
+    sort_by_accepted = copy.deepcopy(points)
+    sort_by_accepted = sort_by_accepted.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
 
-    if request.method == 'POST':
-        x = dict(request.POST).get('proposal_list')
-        for i in x:
-            m = Proposal.objects.get(slug=i)
-            setattr(m, 'status', 'published')
-            m.save()
-        return redirect('http://localhost:8000/leaderboard/')
-    else:
-        form = BulkSubmit(request.user)
-    context = {'form' : form }
-    return render(request, 'home/leaderboard.html', context)
+    return render(request, 'home/leaderboard.html', context={ 'q':sort_by_submissions })
+
+
+
+
+    # if request.method == 'POST':
+    #     x = dict(request.POST).get('proposal_list')
+    #     for i in x:
+    #         m = Proposal.objects.get(slug=i)
+    #         setattr(m, 'status', 'published')
+    #         m.save()
+    #     return redirect('http://localhost:8000/leaderboard/')
+    # else:
+    #     form = BulkSubmit(request.user)
+    # context = {'form' : form }
+    # return render(request, 'home/leaderboard.html', context)
