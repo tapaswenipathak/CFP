@@ -17,6 +17,7 @@
     <div>
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:conference-update' object.id object.slug %}">Update</a>
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:conference-proposal-list' object.id object.slug %}">List of submitted Proposals</a>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:conference-dashboard' object.id object.slug %}">Go to Dashboard</a>
     </div>
   {% elif user.is_speaker %}
   <div>
@@ -24,17 +25,3 @@
   </div>
   {% endif %}
 {% endblock content %}
-<!-- <body>
-<h1>organizer name : {{ object.organizer }}</h1>
-<p>conference name : {{ object.name }}</p>
-<p>description : {{ object.description }}</p>
-<p>start date : {{ object.start_date|date }}</p>
-<p>end date : {{ object.end_date|date }}</p>
-<p>venue : {{ object.venue }}</p>
-<p>twitter_id : {{ object.twitter_id }}</p>
-<br>
-<a href="{% url 'events:conference-update' object.id object.slug %}">update view</a>
-<br>
-<a href="{% url 'events:conference-proposal-list' object.id object.slug %}">Show proposals</a>
-</body>
- -->

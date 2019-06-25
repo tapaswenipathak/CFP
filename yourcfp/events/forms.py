@@ -18,3 +18,13 @@ class ProposalStatusForm(forms.ModelForm):
     class Meta:
         model = ProposalStatus
         fields = ['proposal_status']
+
+CONFERENCE_CHOICES = (
+    ('all' , 'Show all submitted proposals'),
+    ('pending_reviews' , 'Show all proposals to be reviewed'),
+    ('accepted' , 'Show all accepted proposals'),
+    ('rejected' , 'Show all rejected proposals'),
+)
+
+class ConferenceDashboardForm(forms.Form):
+    options = forms.ChoiceField(choices=CONFERENCE_CHOICES, widget=forms.RadioSelect)

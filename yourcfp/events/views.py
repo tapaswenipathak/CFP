@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
 from .models import Conference
-from .forms import ConferenceForm, FeedbackForm, ProposalStatusForm
+from .forms import ConferenceForm, FeedbackForm, ProposalStatusForm, ConferenceDashboardForm
 from proposals.models import Proposal
 
 User = get_user_model()
@@ -116,3 +116,57 @@ def feedback(request, pk, slug):
 
         return render(request, 'events/feedback.html', context)
     return HttpResponseForbidden('<h1>403 forbidden<h1/>')
+
+def check_for_organizer(user):
+    return user.is_organizer
+
+@login_required
+@user_passes_test(check_for_organizer)
+def conference_dashboard(request, pk, slug):
+    conference = Conference.objects.get(id=pk)
+    if request.user.organizer == conference.organizer:
+        form = ConferenceDashboardForm()
+        context = {
+            'proposals' : [],
+            'form' : form
+        }
+        proposals = conference.proposal_set.all()
+        context['proposals'] = proposals
+        options_list = ['accepted', 'rejected', 'all', 'pending_reviews']
+        display_list = []
+
+        if request.method == 'POST':
+            selected_option = dict(request.POST).get('options')
+
+            if selected_option[0] == 'accepted':
+                for i in proposals:
+                    if i.proposalstatus.proposal_status == 'accepted':
+                        display_list.append(i)
+                context['proposals'] = display_list
+                return render(request, 'events/conference_dashboard.html', context)
+
+            if selected_option[0] == 'rejected':
+                for i in proposals:
+                    if i.proposalstatus.proposal_status == 'rejected':
+                        display_list.append(i)
+                context['proposals'] = display_list
+                return render(request, 'events/conference_dashboard.html', context)
+
+            if selected_option[0] == 'all':
+                for i in proposals:
+                        display_list.append(i)
+                context['proposals'] = display_list
+                return render(request, 'events/conference_dashboard.html', context)
+
+            if selected_option[0] == 'pending_reviews':
+                for i in proposals:
+                    if i.proposalstatus.proposal_status == 'to_be_reviewed':
+                        display_list.append(i)
+                context['proposals'] = display_list
+                return render(request, 'events/conference_dashboard.html', context)
+
+        else:
+            context['form'] = form
+        return render(request, 'events/conference_dashboard.html', context)
+    else:
+        return HttpResponseForbidden('<h1>403 forbidden<h1/>')

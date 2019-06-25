@@ -1,0 +1,28 @@
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <h1>Welcome to your Dashboard</h1>
+  <table class="table table-striped table-bordered table-hover table-condensed">
+    <thead>
+      Welcome to you Dashboard
+    </thead>
+    <th>Proposal Title</th>
+    <th>Conference</th>
+    <th>Submission status</th>
+    <th>proposal status</th>
+    {% for proposal in proposals %}
+      <tr>
+        <td><a href="{% url 'proposals:proposal-detail' proposal.id proposal.slug %}">{{ proposal.title }}</a></td>
+        <td><a href="{% url 'events:conference-detail' proposal.name.id proposal.name.slug %}">{{ proposal.name }}</a></td>
+        <td>{{ proposal.status }}</td>
+        <td>{{ proposal.proposalstatus.proposal_status }}</td>
+      </tr>
+    {% endfor %}
+  </table>
+  <h2>Select your option</h2>
+  <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Send">
+  </form>
+{% endblock content %}

@@ -22,8 +22,8 @@
     {% if user.is_speaker %}
       <div>
         <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'proposals:proposal-list' %}">Show my proposals</a>
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:dashboard' %}">Go to Dashboard</a>
-        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:bulk_submit' %}">See all Draft Proposals</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:speaker-dashboard' %}">Go to Dashboard</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:bulk_submit' %}">Publish Draft Proposals</a>
       </div>
     {% elif user.is_organizer %}
     <div>

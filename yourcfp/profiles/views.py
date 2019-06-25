@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect, reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import get_user_model
 
 from proposals.models import Proposal, ProposalStatus
 from .models import Profile
-from .forms import ProfileForm, DashboardForm
+from .forms import ProfileForm, SpeakerDashboardForm
 from django.http import HttpResponse
 from proposals.forms import BulkSubmit
 
@@ -43,8 +43,13 @@ def profile_detail(request, slug):
     else:
         return HttpResponse('User does not exist')
 
+def check_for_speaker(user):
+    return user.is_speaker
+
+@login_required
+@user_passes_test(check_for_speaker)
 def speaker_dashboard(request):
-    form = DashboardForm()
+    form = SpeakerDashboardForm()
     context = {
         'proposals' : [],
         'form' : form
@@ -63,38 +68,38 @@ def speaker_dashboard(request):
                 if i.proposalstatus.proposal_status == 'accepted':
                     display_list.append(i)
             context['proposals'] = display_list
-            return render(request, 'profiles/dashboard.html', context)
+            return render(request, 'profiles/speaker_dashboard.html', context)
 
         if selected_option[0] == 'rejected':
             for i in proposals:
                 if i.proposalstatus.proposal_status == 'rejected':
                     display_list.append(i)
             context['proposals'] = display_list
-            return render(request, 'profiles/dashboard.html', context)
+            return render(request, 'profiles/speaker_dashboard.html', context)
 
         if selected_option[0] == 'draft':
             for i in proposals:
                 if i.status == 'draft':
                     display_list.append(i)
             context['proposals'] = display_list
-            return render(request, 'profiles/dashboard.html', context)
+            return render(request, 'profiles/speaker_dashboard.html', context)
 
         if selected_option[0] == 'published':
             for i in proposals:
                 if i.status == 'published':
                     display_list.append(i)
             context['proposals'] = display_list
-            return render(request, 'profiles/dashboard.html', context)
+            return render(request, 'profiles/speaker_dashboard.html', context)
 
     else:
         context['form'] = form
-    return render(request, 'profiles/dashboard.html', context)
+    return render(request, 'profiles/speaker_dashboard.html', context)
 
 @login_required
 def bulk_submit(request):
     if request.method == 'POST':
-        x = dict(request.POST).get('proposal_list')
-        for i in x:
+        proposals = dict(request.POST).get('proposal_list')
+        for i in proposals:
             m = Proposal.objects.get(slug=i)
             setattr(m, 'status', 'published')
             m.save()

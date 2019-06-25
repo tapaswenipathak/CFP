@@ -23,6 +23,7 @@
   <form method="post">
       {% csrf_token %}
       {{ form|crispy }}
-      <input type="submit" value="Save">
+      <input type="submit" value="Send">
   </form>
+  <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:bulk_submit' %}">Publish Draft Proposals</a>
 {% endblock content %}

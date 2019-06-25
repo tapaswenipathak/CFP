@@ -6,5 +6,5 @@ urlpatterns = [
     path('profile/', profile, name='profile'),
     path('profile/<slug:slug>', profile_detail, name='profile_detail'),
     path('draft-proposals/', bulk_submit, name='bulk_submit'),
-    path('dashboard', speaker_dashboard, name='dashboard'),
+    path('speaker/dashboard', speaker_dashboard, name='speaker-dashboard'),
 ]
