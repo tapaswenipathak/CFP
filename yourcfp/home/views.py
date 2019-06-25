@@ -1,5 +1,5 @@
 import operator
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView
 from .forms import SearchForm
 from django.contrib.auth import get_user_model
@@ -67,12 +67,13 @@ def leaderboard(request):
     sort_by_accepted = points.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
 
     if request.method == 'POST':
-        # print('----------------------')
-        # print(Proposal.objects.all().filter(status='draft'))
-        # print('----------------------')
-        form = BulkSubmit()
+        x = dict(request.POST).get('proposal_list')
+        for i in x:
+            m = Proposal.objects.get(slug=i)
+            setattr(m, 'status', 'published')
+            m.save()
+        return redirect('http://localhost:8000/leaderboard/')
     else:
-        Proposal.objects.all()
-        form = BulkSubmit()
+        form = BulkSubmit(request.user)
     context = {'form' : form }
     return render(request, 'home/leaderboard.html', context)

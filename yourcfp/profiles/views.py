@@ -1,68 +1,13 @@
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+
+from proposals.models import Proposal, ProposalStatus
 from .models import Profile
-from .forms import ProfileForm
+from .forms import ProfileForm, DashboardForm
 from django.http import HttpResponse
 
 User = get_user_model()
-
-# Create your views here
-
-# @login_required
-# def profile(request):
-#     username = request.user
-#     speaker_type = request.user.is_speaker
-#     detail = None
-#
-#     if request.method == "POST" and username == request.user and speaker_type:
-#         user = User.objects.get(pk=username.id)
-#         detail = Profile.objects.filter(user=user).exists()
-#         if detail:
-#             detail = Profile.objects.get(user=user)
-#             detail_form = ProfileForm(request.POST, instance=detail)
-#             if detail_form.is_valid():
-#                 detail = detail_form.save()
-#                 return redirect(reverse('profiles:profile'))
-#         else:
-#             user = User.objects.get(pk=username.id)
-#             detail_form = ProfileForm(request.POST)
-#             if detail_form.is_valid():
-#                 detail_form = detail_form.save(commit=False)
-#                 detail_form.user = user
-#                 detail_form.save()
-#                 return redirect('profiles:profile')
-#
-#     elif request.method == "GET" and speaker_type:
-#         user = User.objects.get(pk=username.id)
-#         detail = Profile.objects.filter(user=user).exists()
-#         if detail:
-#             form = ProfileForm()
-#             return render(request, 'profiles/userprofile.html', {'form': form})
-#         else:
-#             form = ProfileForm()
-#             return render(request, 'profiles/userprofile.html', {'form': form})
-#
-# def profile_detail(request, user_name):
-#     user = User.objects.filter(username=user_name).exists()
-#     if user:
-#         user = User.objects.get(username=user_name)
-#         profile = Profile.objects.filter(user=user).exists()
-#         if profile:
-#             profile = Profile.objects.get(user=user)
-#             context = {
-#                 'blog_url':profile.blog_url,
-#                 'location':profile.location,
-#                 'twitter_handle':profile.twitter_handle,
-#                 'biography':profile.bio
-#             }
-#             return render(request, 'profiles/profile.html', context)
-#         else:
-#             return HttpResponse('Does not exist')
-#     else:
-#         return HttpResponse('User does not exist')
-
-
 
 @login_required
 def profile(request):
@@ -96,3 +41,50 @@ def profile_detail(request, slug):
         return render(request, 'profiles/profile.html', context)
     else:
         return HttpResponse('User does not exist')
+
+def dashboard(request):
+    form = DashboardForm()
+    context = {
+        'proposals' : [],
+        'form' : form
+    }
+    proposals = Proposal.objects.filter(author=request.user.speaker)
+    context['proposals'] = proposals
+    options_list = ['accepted' , 'rejected', 'draft', 'published']
+    display_list = []
+    if request.method == 'POST':
+
+        selected_option = dict(request.POST).get('options')
+
+        if selected_option[0] == 'accepted':
+            print('accepted')
+            for i in proposals:
+                if i.proposalstatus.proposal_status == 'accepted':
+                    display_list.append(i)
+            context['proposals'] = display_list
+            return render(request, 'profiles/dashboard.html', context)
+
+        if selected_option[0] == 'rejected':
+            for i in proposals:
+                if i.proposalstatus.proposal_status == 'rejected':
+                    display_list.append(i)
+            context['proposals'] = display_list
+            return render(request, 'profiles/dashboard.html', context)
+
+        if selected_option[0] == 'draft':
+            for i in proposals:
+                if i.status == 'draft':
+                    display_list.append(i)
+            context['proposals'] = display_list
+            return render(request, 'profiles/dashboard.html', context)
+
+        if selected_option[0] == 'published':
+            for i in proposals:
+                if i.status == 'published':
+                    display_list.append(i)
+            context['proposals'] = display_list
+            return render(request, 'profiles/dashboard.html', context)
+
+    else:
+        context['form'] = form
+    return render(request, 'profiles/dashboard.html', context)

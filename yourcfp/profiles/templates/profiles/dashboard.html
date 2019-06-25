@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    Welcome to you Dashboard
+  </thead>
+  <caption>This is your dashboard</caption>
+  <th>Proposal Title</th>
+  <th>Conference</th>
+  <th>Submission status</th>
+  <th>proposal status</th>
+  {% for proposal in proposals %}
+    <tr>
+      <td><a href="{% url 'proposals:proposal-detail' proposal.id proposal.slug %}">{{ proposal.title }}</a></td>
+      <td><a href="{% url 'events:conference-detail' proposal.name.id proposal.name.slug %}">{{ proposal.name }}</a></td>
+      <td>{{ proposal.status }}</td>
+      <td>{{ proposal.proposalstatus.proposal_status }}</td>
+    </tr>
+  {% endfor %}
+</table>
+
+<br>
+
+<h2>testing it out</h2>
+<br>
+<form method="post">{% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Save">
+</form>

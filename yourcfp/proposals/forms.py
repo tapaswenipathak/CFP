@@ -1,4 +1,6 @@
 from django import forms
+from django.db.models import Q
+
 from .models import Proposal
 
 class ProposalForm(forms.ModelForm):
@@ -8,17 +10,15 @@ class ProposalForm(forms.ModelForm):
 
 class BulkSubmit(forms.Form):
 
-    x = Proposal.objects.all()
-    x = x.filter(status='draft')
-    print('*************************************')
-    print(x)
-    print('*************************************')
-    d=[]
-    for i in x:
-        d.append((i.slug, i.title))
-    proposal_list = forms.MultipleChoiceField(choices=d,
-    widget=forms.widgets.CheckboxSelectMultiple())
+    proposal_list = forms.MultipleChoiceField()
 
+    def __init__(self, user, *args, **kwargs):
+        super(BulkSubmit, self).__init__(*args, **kwargs)
+        self.fields['proposal_list'] = forms.MultipleChoiceField(choices=[(proposal.slug, proposal.title) for proposal in Proposal.objects.all().filter(Q(author=user.speaker) & Q(status='draft'))], widget=forms.widgets.CheckboxSelectMultiple())
+#
+# def __init__(self, user, *args, **kwargs):
+#         super(MyForm, self).__init__(*args, **kwargs)
+#         self.fields['favorite_color'] = forms.MultipleChoiceField(choices=[(proposal.slug, proposal.title) for proposal in Proposal.objects.all().filter(status='draft')])
     #forms.RadioSelect(choices=list(Proposal.objects.all()))
 
 # class ExampleForm(forms.Form):
