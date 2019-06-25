@@ -1,4 +1,15 @@
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <br>
+  <h1>Register as Organizer</h1>
+  <form method="post" style="background-color:#ffffff">{% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Register">
+  </form>
+  <div style="background-color:#ffffff;">
+    <small class="text-muted">
+      Already Have An Account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+    </small>
+  </div>
+{% endblock content %}

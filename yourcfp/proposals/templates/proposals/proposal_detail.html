@@ -1,4 +1,39 @@
-<h1>conference name : {{ object.name }}</h1>
+{% extends "yourcfp/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'profiles:profile' %}">{{ object.author }}</a>
+      </div>
+      <h2 class="article-title">author : {{ object.author }}</h2>
+      <h4 class="article-title">conference name : {{ object.name }}</h4>
+      <p>Title : {{ object.title }}</p>
+      <p>Slug : {{ object.slug }}</p>
+      <p>Outline: {{ object.outline }}</p>
+      <p>Pitch: {{ object.pitch }}</p>
+      <p>Status: {{ object.status }}</p>
+      <p>Talktime: {{ object.talktime }}</p>
+    </div>
+  </article>
+  <br>
+  <article class="media content-section">
+    <div class="media-body">
+      <h2 class="article-title">Proposal Feedback</h2>
+      <h5 class="article-title">Reviewer: {{ object.name.organizer.user.username }}</h5>
+      <p>Review Status : {{ object.proposalstatus.proposal_status }}</p>
+      <p>Feedback : {{ object.feedback.feedback_text }}</p>
+    </div>
+  </article>
+  {% if object.author == user.speaker %}
+    <div>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'proposals:proposal-update' object.id object.slug %}">Update</a>
+    </div>
+  {% elif user.organizer == proposal.name.organizer %}
+  <div>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'proposals:proposal-feedback' object.id object.slug %}">Send Feedback</a>
+  </div>  {% endif %}
+{% endblock content %}
+<!-- <h1>conference name : {{ object.name }}</h1>
 <p>author name : {{ object.author }}</p>
 <p>title : {{ object.title }}</p>
 <p>slug : {{ object.slug }}</p>
@@ -6,4 +41,4 @@
 <p>pitch: {{ object.pitch }}</p>
 <p>status: {{ object.status }}</p>
 <p>talktime: {{ object.talktime }}</p>
-<br>
+<br> -->

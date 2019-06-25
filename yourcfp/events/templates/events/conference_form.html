@@ -1,4 +1,14 @@
-<form method="post">{% csrf_token %}
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <br>
+  <h1>Update Event</h1>
+  <form method="post" style="background-color:#ffffff">{% csrf_token %}
+      {{ form|crispy }}
+      <input type="submit" value="Submit">
+  </form>
+{% endblock content %}
+<!-- <form method="post">{% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Save">
-</form>
+</form> -->

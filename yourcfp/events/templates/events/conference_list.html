@@ -1,6 +1,18 @@
-<h2>Conferences</h2>
+{% extends "yourcfp/base.html" %}
+{% block content %}
+    {% for conference in object_list %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title" href="{% url 'events:conference-detail' conference.id conference.slug %}">{{ conference.name }}</a></h2>
+            <small class="text-muted"> Starts on {{ conference.start_date|date:"F d, Y" }}</small>
+            <p class="article-content">{{ conference.description|truncatewords:30|linebreaks }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}
+<!-- <h2>Conferences</h2>
 <ul>
     {% for conference in object_list %}
         <li><a href="{% url 'events:conference-detail' conference.id conference.slug %}">{{ conference.name }}</a></li>
     {% endfor %}
-</ul>
+</ul> -->

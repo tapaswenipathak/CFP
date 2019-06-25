@@ -1,4 +1,27 @@
-<form method="POST" >
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <div class="media-body">
+          <h2 class="account-heading">Send Feedback and set Proposal Status</h2>
+        </div>
+      </div>
+      <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Feedback and Status</legend>
+              {{ f_form.as_p }}
+              {{ p_form.as_p }}
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Submit</button>
+          </div>
+      </form>
+    </div>
+{% endblock content %}
+
+<!-- <form method="POST" >
 {% csrf_token %}
 <fieldset class="form-group">
 
@@ -6,4 +29,4 @@
 {{ p_form.as_p }}
 </fieldset>
 
-<button type="submit">update</button>
+<button type="submit">update</button> -->

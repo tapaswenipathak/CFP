@@ -1,4 +1,18 @@
 {% extends "yourcfp/base.html" %}
 {% block content %}
-<p>gs</p>
+  <section>
+    <h1 style="text-align:center;">Welcome to YourCFP</h1>
+    <p style="text-align:center;">A CFP site for all your events</p>
+  </section>
+  <br>
+  <br>
 {% endblock content %}
+
+
+
+<br>
+<br>
+<a href="{% url 'events:conference-list' %}">list of conferences</a>
+<br>
+<a href="{% url 'events:conference-create' %}">create a new event</a>
+<hr>
