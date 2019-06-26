@@ -103,7 +103,7 @@ def bulk_submit(request):
             m = Proposal.objects.get(slug=i)
             setattr(m, 'status', 'published')
             m.save()
-        return redirect(reverse('profiles:dashboard'))
+        return redirect(reverse('profiles:speaker-dashboard'))
     else:
         form = BulkSubmit(request.user)
     context = {'form' : form }
