@@ -3,16 +3,16 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'profiles:profile' %}">{{ object.author }}</a>
+        <a class="mr-2" href="{% url 'profiles:profile-detail' object.author.user.slug %}">{{ object.author }}</a>
       </div>
-      <h2 class="article-title">author : {{ object.author }}</h2>
-      <h4 class="article-title">conference name : {{ object.name }}</h4>
-      <p>Title : {{ object.title }}</p>
-      <p>Slug : {{ object.slug }}</p>
-      <p>Outline: {{ object.outline }}</p>
-      <p>Pitch: {{ object.pitch }}</p>
-      <p>Status: {{ object.status }}</p>
-      <p>Talktime: {{ object.talktime }}</p>
+      <h2 class="article-title"><strong>Author</strong> : {{ object.author }}</h2>
+      <h4 class="article-title"><strong>Conference name</strong> : {{ object.name }}</h4>
+      <p><strong>Title</strong> : {{ object.title }}</p>
+      <p><strong>Slug</strong> : {{ object.slug }}</p>
+      <p><strong>Outline</strong> : {{ object.outline }}</p>
+      <p><strong>Pitch</strong> : {{ object.pitch }}</p>
+      <p><strong>Status</strong>: {{ object.status }}</p>
+      <p><strong>Talktime</strong> : {{ object.talktime }}</p>
     </div>
   </article>
   <br>

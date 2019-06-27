@@ -34,10 +34,12 @@ def profile_detail(request, slug):
         user = User.objects.get(slug=slug)
         profile = Profile.objects.get(user=user)
         context = {
-            'blog_url':profile.blog_url,
-            'location':profile.location,
-            'twitter_handle':profile.twitter_handle,
-            'biography':profile.bio
+            'username' : profile.user.username,
+            'blog_url': profile.blog_url,
+            'location': profile.location,
+            'twitter_handle' : profile.twitter_handle,
+            'biography': profile.bio,
+            'organization' : profile.organization
         }
         return render(request, 'profiles/profile.html', context)
     else:

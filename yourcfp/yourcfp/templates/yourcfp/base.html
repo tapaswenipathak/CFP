@@ -29,12 +29,18 @@
               <a class="nav-item nav-link" href="{% url 'events:conference-list' %}">Events</a>
               {% if user.is_authenticated %}
                 <a class="nav-item nav-link" href="{% url 'profiles:profile' %}">Profile</a>
+                <a class="nav-item nav-link" href="{% url 'home:leaderboard' %}">Leaderboard</a>
                 <a class="nav-item nav-link" href="{% url 'home:search' %}">Search for Speakers</a>
                 <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                {% if user.is_speaker %}
+                  <a class="nav-item nav-link" href="{% url 'profiles:speaker-dashboard' %}">Go to Dashboard</a>
+                {% elif user.is_organizer %}
+                  <a class="nav-item nav-link" href="{% url 'events:user-conference-list'%}">Show my Conferences</a>
+                {% endif %}
               {% else %}
                 <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
-                <a class="nav-item nav-link" href="{% url 'users:register-as-organizer' %}">Register as Speaker</a>
-                <a class="nav-item nav-link" href="{% url 'users:register-as-speaker' %}">Register as Organizer</a>
+                <a class="nav-item nav-link" href="{% url 'users:register-as-organizer' %}">Register as Organizer</a>
+                <a class="nav-item nav-link" href="{% url 'users:register-as-speaker' %}">Register as Speaker</a>
               {% endif %}
             </div>
           </div>

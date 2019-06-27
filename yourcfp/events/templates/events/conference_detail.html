@@ -3,15 +3,17 @@
   <article class="media content-section">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'profiles:profile_detail' object.organizer.user.slug %}">{{ object.organizer }}</a>
+        <a class="mr-2" href="{% url 'profiles:profile-detail' object.organizer.user.slug %}">{{ object.organizer }}</a>
       </div>
       <h2 class="article-title">{{ object.name }}</h2>
-      <p>description : {{ object.description }}</p>
-      <p>start date : {{ object.start_date|date }}</p>
-      <p>end date : {{ object.end_date|date }}</p>
-      <p>venue : {{ object.venue }}</p>
-      <p>twitter_id : {{ object.twitter_id }}</p>
-      <p>Tags: {{ object.topic_tags.all|join:", " }}</p>
+      <br>
+      <p><strong>Description</strong> : {{ object.description }}</p>
+      <p><strong>Start date</strong> : {{ object.start_date|date }}</p>
+      <p><strong>End date</strong> : {{ object.end_date|date }}</p>
+      <p><strong>Venue</strong> : {{ object.venue }}</p>
+      <p><strong>Twitter</strong> : {{ object.twitter_id }}</p>
+      <p><strong>Tags</strong>: {{ object.topic_tags.all|join:", " }}</p>
+    </div>
   </article>
   {% if object.organizer == user.organizer %}
     <div>

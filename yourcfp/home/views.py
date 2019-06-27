@@ -44,9 +44,10 @@ def user_search(request):
 
     return render(request, 'home/search.html',context)
 
+@login_required
 def leaderboard(request):
     points = []
-    x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0}
+    x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0, 'total':0}
     users = Speaker.objects.all()
     for user in users:
         x['speaker'] = user
@@ -58,27 +59,16 @@ def leaderboard(request):
         points.append(x)
         x = {'speaker':None, 'score_for_accepted':0, 'score_for_submission':0}
 
+    for i in points:
+        i['total'] = i['score_for_accepted'] + i['score_for_submission']
+
     sort_by_submissions = copy.deepcopy(points)
     sort_by_submissions.sort(key=operator.itemgetter('score_for_submission'), reverse=True)
-    print('=======================================')
-    print(sort_by_submissions)
-    print('=======================================')
+
     sort_by_accepted = copy.deepcopy(points)
-    sort_by_accepted = sort_by_accepted.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
+    sort_by_accepted.sort(key=operator.itemgetter('score_for_accepted'), reverse=True)
 
-    return render(request, 'home/leaderboard.html', context={ 'q':sort_by_submissions })
+    sort_by_total = copy.deepcopy(points)
+    sort_by_total.sort(key=operator.itemgetter('total'), reverse=True)
 
-
-
-
-    # if request.method == 'POST':
-    #     x = dict(request.POST).get('proposal_list')
-    #     for i in x:
-    #         m = Proposal.objects.get(slug=i)
-    #         setattr(m, 'status', 'published')
-    #         m.save()
-    #     return redirect('http://localhost:8000/leaderboard/')
-    # else:
-    #     form = BulkSubmit(request.user)
-    # context = {'form' : form }
-    # return render(request, 'home/leaderboard.html', context)
+    return render(request, 'home/leaderboard.html', context={ 'user_list':sort_by_total })
