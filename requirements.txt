@@ -2,6 +2,9 @@ amqp==2.5.0
 billiard==3.6.0.0
 celery==4.3.0
 Django==2.2
+django-bootstrap4==0.0.8
+django-crispy-forms==1.7.2
+django-debug-toolbar==1.11
 django-taggit==1.1.0
 kombu==4.6.1
 pytz==2019.1

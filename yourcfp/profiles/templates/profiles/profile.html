@@ -1,7 +1,14 @@
-{{ blog_url }}
-<br>
-{{ location }}
-<br>
-{{ twitter_handle }}
-<br>
-{{ biography }}
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <article class="media content-section">
+    <div class="media-body">
+      <h2 class="article-title">{{ username }}'s Profile</h2>
+      <p><strong>Blog</strong> : {{ blog_url }}</p>
+      <p><strong>Location</strong> : {{ location }}</p>
+      <p><strong>Twitter</strong> : {{ twitter_handle }}</p>
+      <p><strong>Biography</strong> : {{ biography }}</p>
+      <p><strong>Organization</strong> : {{ organization }}</p>
+    </div>
+  </article>
+{% endblock content %}

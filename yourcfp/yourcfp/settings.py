@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'home.apps.HomeConfig',
     'taggit',
+    'crispy_forms',
     'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -154,3 +155,5 @@ DEBUG_TOOLBAR_PANELS = [
 ]
 
 INTERNAL_IPS = ['127.0.0.1',]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

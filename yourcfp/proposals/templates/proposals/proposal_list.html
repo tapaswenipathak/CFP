@@ -1,6 +1,18 @@
-<h2>Proposals</h2>
+{% extends "yourcfp/base.html" %}
+{% block content %}
+    {% for proposal in object_list %}
+        <article class="media content-section">
+          <div class="media-body">
+            <h2><a class="article-title" <a href="{% url 'proposals:proposal-detail' proposal.id proposal.slug %}">{{ proposal.author }}'s {{ proposal.name }} proposal </a></h2>
+            <h5><a class="article-title">{{ proposal.title }} </a></h5>
+            <small class="text-muted"> {{ proposal.outline }}</small>
+            <p class="article-content">{{ proposal.pitch|truncatewords:30|linebreaks }}</p>
+          </div>
+        </article>
+    {% endfor %}
+{% endblock content %}<!-- <h2>Proposals</h2>
 <ul>
     {% for proposal in object_list %}
         <li><a href="{% url 'proposals:proposal-detail' proposal.id proposal.slug %}">{{ proposal.author }}'s {{ proposal.name }} proposal </a></li>
     {% endfor %}
-</ul>
+</ul> -->

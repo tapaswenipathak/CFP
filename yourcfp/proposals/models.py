@@ -18,7 +18,6 @@ STATUS_CHOICES = (
 
 REVIEW_STATUS = (
     ('to_be_reviewed', 'Is yet to be reviewed'),
-    ('under_review', 'Being Reviewed'),
     ('accepted', 'Accepted'),
     ('rejected', 'Rejected')
 )

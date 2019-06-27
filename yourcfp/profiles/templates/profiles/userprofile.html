@@ -1,12 +1,34 @@
-<h2>Edit Profile</h2>
-<br>
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Save">
-</form>
-
-{% if user.is_speaker %}
-  <a href="{% url 'proposals:proposal-list' %}">Show my proposals</a>
-{% else %}
-  <a href="{% url 'events:user-conference-list'%}">Show my Conferences</a>
-{% endif %}
+{% extends "yourcfp/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+      <div class="media">
+        <div class="media-body">
+          <h2 class="account-heading">{{ user.username }}</h2>
+          <p class="text-secondary">{{ user.email }}</p>
+        </div>
+      </div>
+      <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Profile Info</legend>
+              {{ form|crispy }}
+          </fieldset>
+          <div class="form-group">
+              <button class="btn btn-outline-info" type="submit">Update</button>
+          </div>
+      </form>
+    </div>
+    {% if user.is_speaker %}
+      <div>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'proposals:proposal-list' %}">Show my proposals</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:speaker-dashboard' %}">Go to Dashboard</a>
+        <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'profiles:bulk_submit' %}">Publish Draft Proposals</a>
+      </div>
+    {% elif user.is_organizer %}
+    <div>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:user-conference-list'%}">Show my Conferences</a>
+      <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:conference-create' %}">Create a new Event</a>
+    </div>
+    {% endif %}
+{% endblock content %}
