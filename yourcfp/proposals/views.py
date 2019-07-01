@@ -8,7 +8,7 @@ from django.http import HttpResponse, Http404
 from .forms import ProposalForm
 from .models import Proposal
 from events.models import Conference
-from .tasks import propsal_remainder
+from .tasks import proposal_remainder
 # Create your views here.
 
 class ProposalCreateView(PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin, CreateView):

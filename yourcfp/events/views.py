@@ -7,10 +7,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, 
 from django.http import HttpResponse, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from ics import Calendar, Event
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 from .models import Conference
 from .forms import ConferenceForm, FeedbackForm, ProposalStatusForm, ConferenceDashboardForm
 from proposals.models import Proposal
+from .tasks import mail_ics_file
 
 User = get_user_model()
 
@@ -170,3 +174,21 @@ def conference_dashboard(request, pk, slug):
         return render(request, 'events/conference_dashboard.html', context)
     else:
         return HttpResponseForbidden('<h1>403 forbidden<h1/>')
+
+@login_required
+def add_to_calendar(request, pk, slug):
+    conference = Conference.objects.get(id=pk)
+    e = Event()
+    c = Calendar()
+    e.name = conference.name
+    e.begin = conference.start_date.isocalendar()
+    e.end = conference.end_date.isocalendar()
+    e.location = conference.venue
+    c.events.add(e)
+    c.creator = conference.organizer.user.username
+    with open('my.ics', 'w') as my_file:
+        my_file.writelines(c)
+
+    mail_ics_file.delay(file_name='my.ics', to=request.user.email)
+
+    return redirect('events:conference-detail', pk=pk, slug=slug)

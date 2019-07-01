@@ -1,12 +1,18 @@
-from celery import task
+import datetime
+
 from django.core.mail import send_mail
-from .models import Proposal
+from celery import Celery
+from celery import task
+from django.conf import settings
+
+from proposals.models import Proposal
 
 @task
-def propsal_remainder(proposal_id):
-    proposal = Proposal.published.get(proposal_id)
-    subject = 'Proposal no. {}'.format(proposal.id)
-    message = 'Dear {},\nThe deadline for proposal submission is here\
-                Submit your proposal for conference {}.'.format(Proposal.author,proposal.name.name)
-    mail_sent = send_mail(subject,message,'admin@myshop.com',[proposal.author.user.email])
-    return mail_sent
+def proposal_remainder():
+    proposals = Proposal.objects.all().filter(status='draft')
+
+    for proposal in proposals:
+        if proposal.name.start_date < datetime.date.today():
+            subject = 'Proposal submission remainder'
+            message = f'Dear {proposal.author},\nThe deadline for proposal {proposal.title} submission is here.Submit your proposal for conference {proposal.name.name}.'
+            send_mail(subject, message, settings.EMAIL_HOST_USER, [proposal.author.user.email])

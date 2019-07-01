@@ -15,6 +15,9 @@
       <p><strong>Tags</strong>: {{ object.topic_tags.all|join:", " }}</p>
     </div>
   </article>
+  <div>
+    <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:add-to-calendar' object.id object.slug %}">Add to Calendar</a>
+  </div>
   {% if object.organizer == user.organizer %}
     <div>
       <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'events:conference-update' object.id object.slug %}">Update</a>

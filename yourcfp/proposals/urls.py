@@ -1,6 +1,7 @@
 from django.urls import path
 from .views import ProposalCreateView, UserProposalListView, ProposalDetailView, ProposalUpdateView
 from events.views import feedback
+
 app_name = 'proposals'
 
 urlpatterns = [

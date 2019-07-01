@@ -89,7 +89,7 @@ DATABASES = {
     }
 }
 
-
+CELERY_BROKER_URL = 'amqp://localhost'
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
@@ -137,7 +137,12 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'profiles:profile'
 LOGIN_URL = '/login/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'youcfp', 'invites')
 
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
